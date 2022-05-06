@@ -1,12 +1,10 @@
 package server
 
 import (
-	"context"
 	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/infoidx/logger"
 	"github.com/infoidx/server/middleware"
 	"go.uber.org/fx"
 )
@@ -32,8 +30,6 @@ var UseLogger = func(writer io.Writer) Option {
 		return nil
 	}
 }
-
-var UseLogrus = UseLogger(logger.WithContext(context.Background()).Writer())
 
 var UseCustomLogger = func() Option {
 	return func(engine *gin.Engine) error {
@@ -73,10 +69,6 @@ func NewGinServer(opts ...Option) *gin.Engine {
 		ctx.String(http.StatusOK, "ok")
 	})
 	return server
-}
-
-func DefaultGinServer() *gin.Engine {
-	return NewGinServer(UseLogrus, UseRecovery(), UseCors())
 }
 
 // 代码挪至具体业务中实现
